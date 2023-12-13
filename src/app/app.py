@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from flask.wrappers import Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_compress import Compress
+from werkzeug.exceptions import BadRequest
 from ..db.datahandler import DataHandler
 from ..configs import URI
 
@@ -58,6 +59,9 @@ def get_quotes() -> Response:
     cols = request.args.get("cols", type=list)
     process = request.args.get("process", True, type=bool)
     include_ref_price = request.args.get("include-ref-price", False, type=bool)
+    
+    if not start or not end:
+        raise BadRequest("start and end must be provided.")
 
     with DataHandler() as datahandler:
         try:
