@@ -46,6 +46,8 @@ Below, we query quotes for all pairs of the supported tokens from December 12, 2
 curl --compressed "http://97.107.138.106/quotes?&start=1702166400&end=1702252800"
 ```
 
+*Note that Python's `requests` will handle the `gzip` compression automatically.*
+
 ### Parameters
 
 | Parameter           | Description                                                                                          | Default Value  | Required |
@@ -64,6 +66,6 @@ There are a couple things we are still working on here:
 
 - Cache common responses.
 
-- Acquire and configuring a domain name.
+- Acquire and configure a domain name.
 
 - Add more tokens to our queries.
