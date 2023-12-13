@@ -46,3 +46,7 @@ class Quote(Base):
     price = Column(Float)
     protocols = Column(JSONB)
     timestamp = Column(Integer)
+
+    # TODO migrate db using Alembic and apply below index
+    # (index was created manually via CLI for now.)
+    # idx_timestamp = Index('idx_timestamp', timestamp)

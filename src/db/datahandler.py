@@ -147,6 +147,7 @@ class DataHandler:
         end: int | None = None,
         cols: List[str] | None = None,
         process: bool = False,
+        include_ref_price: bool = False,
     ) -> pd.DataFrame:
         """
         Get 1inch quotes from database. Filter
@@ -173,10 +174,12 @@ class DataHandler:
             return pd.DataFrame()
         results = pd.DataFrame.from_dict(results)
         if process:
-            results = self.process_quotes(results)
+            results = self.process_quotes(results, include_ref_price)
         return results
 
-    def process_quotes(self, df: pd.DataFrame) -> pd.DataFrame:
+    def process_quotes(
+        self, df: pd.DataFrame, include_ref_price: bool = False
+    ) -> pd.DataFrame:
         """
         Performs the following processing steps:
             1. Create datetime index (floored to hours).
@@ -211,6 +214,13 @@ class DataHandler:
         df["price_impact"] = (df["reference_price"] - df["price"]) / df[
             "reference_price"
         ]
+
+        drop = ["hour"]
+
+        if not include_ref_price:
+            drop.append("reference_price")
+
+        df.drop(columns=drop, inplace=True)
 
         df.set_index(["src", "dst"], inplace=True)
         df.sort_index(inplace=True)
