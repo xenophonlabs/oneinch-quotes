@@ -14,10 +14,10 @@ As part of the [crvUSD Risk Modeling effort](https://github.com/xenophonlabs/crv
 We query random trade sizes for each token pair every hour to generate a `price impact curve`. This allows us to model the expected price impact of traders arbitraging the various pools connected to Curve's new stablecoin. In turn, this gives us a reasonable idea of when price-sensitive arbitrageur would or would not arbitrage mispricings in these pools. A more detailed explanation of how these price impact curves are used can be found here: `https://github.com/xenophonlabs/crvUSDrisk/blob/main/notebooks/demo_slippage_curves.ipynb`.
 
 ![Sample Quotes](./figs/sample_quotes.png)
-*Sample quotes for USDC -> WETH between December 1, 2023 and December 8, 2023.*
+*Sample quotes for WETH -> USDC between December 1, 2023 and December 8, 2023.*
 
 ![Sample Price Impact](./figs/sample_price_impact.png)
-*Sample price impact curve for USDC -> WETH between December 1, 2023 and December 8, 2023.*
+*Sample price impact curve for WETH -> USDC between December 1, 2023 and December 8, 2023.*
 
 
 ### Supported Tokens
@@ -56,11 +56,25 @@ Please refer to `notebooks/demo_slippage_curves.ipynb` for a more detailed examp
 |---------------------|------------------------------------------------------------------------------------------------------|----------------|----------|
 | start               | The start timestamp to get quotes for.        | None           | Yes      |
 | end                 | The end timestamp to get quotes for.        | None           | Yes      |
-| pair                | The pair to get quotes for. If not provided, all pairs are returned.                                | None           | No       |
-| cols                | The columns to return. If not provided, the following are returned: [`src`, `dst`, `in_amount`, `out_amount`, `price`, `price_impact`, `timestamp`].                                    | None           | No       |
+| tokens                | Comma-separated string of token addresses to get quotes for. All pairwise permutations of the provided tokens will be fetched. If not provided, all token pairs are returned.                                | None           | No       |
+| cols                | Comma-separated string of columns to return. If not provided, the following are returned: [`src`, `dst`, `in_amount`, `out_amount`, `price`, `price_impact`, `timestamp`].                                    | None           | No       |
 | process             | Whether to process the quotes. If processed, the returned quotes will be grouped by `hour` and a `price_impact` column will be added. Refer to `src.db.datahandler.DataHandler.process_quotes`. | True           | No       |
 | include-ref-price   | Whether to include the inferred reference price for the price impact calc.                           | False          | No       |
 
+##### Further explanation on `tokens` parameter
+
+Quotes for all pairwise permutations of the given `tokens` will be fetched (as long as they are supported). 
+
+For example: `tokens=USDC,USDT,WETH` will return quotes for:
+
+- WETH -> USDC
+- USDC -> WETH
+- USDT -> USDC
+- USDC -> USDT
+- USDT -> WETH
+- WETH -> USDT
+
+*Please note the parameter should specify token **addresses** not symbols.*
 
 ### To Do
 

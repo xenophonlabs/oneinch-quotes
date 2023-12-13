@@ -142,7 +142,7 @@ class DataHandler:
     # pylint: disable=too-many-arguments
     def get_quotes(
         self,
-        pair: tuple | None = None,
+        tokens: List[str] | None = None,
         start: int | None = None,
         end: int | None = None,
         cols: List[str] | None = None,
@@ -163,8 +163,9 @@ class DataHandler:
                 "timestamp",
             ]
         query = self.session.query(*[getattr(Quote, col) for col in cols])
-        if pair:
-            query = query.filter(Quote.src == pair[0], Quote.dst == pair[1])
+        if tokens:
+            logger.info(tokens)
+            query = query.filter(Quote.src.in_(tokens), Quote.dst.in_(tokens))
         if start:
             query = query.filter(Quote.timestamp >= start)
         if end:

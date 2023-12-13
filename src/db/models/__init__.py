@@ -49,4 +49,4 @@ class Quote(Base):
 
     # TODO migrate db using Alembic and apply below index
     # (index was created manually via CLI for now.)
-    # idx_timestamp = Index('idx_timestamp', timestamp)
+    # idx_src_dst_timestamp = Index('idx_src_dst_timestamp', (src, dst, timestamp))

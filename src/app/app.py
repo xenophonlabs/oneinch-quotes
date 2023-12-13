@@ -33,11 +33,13 @@ def get_quotes() -> Response:
         The start timestamp to get quotes for.
     end : int
         The end timestamp to get quotes for.
-    pair : tuple | None, default=None
-        The pair to get quotes for. If not provided,
-        all pairs are returned.
-    cols : list | None, default=None
-        The columns to return. If not provided, the following are returned:
+    tokens : str | None, default=None
+        Comma-separated string of token addresses to get quotes for.
+        All pairwise permutations of the provided tokens will be fetched.
+        If not provided, all token pairs are returned.
+    cols : str | None, default=None
+        Comma-separated string of columns to return.
+        If not provided, the following are returned:
         [`src`, `dst`, `in_amount`, `out_amount`, `price`, `price_impact`, `timestamp`].
     process : bool, default=True
         Whether to process the quotes. If processed, the returned quotes
@@ -54,19 +56,22 @@ def get_quotes() -> Response:
     """
     start = request.args.get("start", type=int)
     end = request.args.get("end", type=int)
-    pair = request.args.get("pair", type=tuple)
-    cols = request.args.get("cols", type=list)
+    tokens_raw = request.args.get("tokens", type=str)
+    cols_raw = request.args.get("cols", type=str)
     process = request.args.get("process", True, type=bool)
     include_ref_price = request.args.get("include-ref-price", False, type=bool)
 
     if not start or not end:
         raise BadRequest("start and end must be provided.")
 
+    tokens = tokens_raw.split(",") if tokens_raw else None
+    cols = cols_raw.split(",") if cols_raw else None
+
     with DataHandler() as datahandler:
         try:
             return jsonify(
                 datahandler.get_quotes(
-                    pair,
+                    tokens,
                     start,
                     end,
                     cols=cols,
