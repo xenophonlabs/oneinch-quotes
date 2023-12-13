@@ -30,7 +30,10 @@ COINGECKO_IDS = {
     USDP: "paxos-standard",
     TUSD: "true-usd",
     WETH: "weth",
+    WSTETH: "wrapped-steth",
+    SFRXETH: "staked-frax-ether",
     WBTC: "wrapped-bitcoin",
+    TBTC: "tbtc",
 }
 STABLE_CG_IDS = [COINGECKO_IDS[coin] for coin in STABLES]
 

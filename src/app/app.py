@@ -18,7 +18,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
 db.init_app(app)
-app.json.compact = True # type: ignore [attr-defined]
+app.json.compact = True  # type: ignore [attr-defined]
 
 
 # TODO add response LRU caching
@@ -59,7 +59,7 @@ def get_quotes() -> Response:
     cols = request.args.get("cols", type=list)
     process = request.args.get("process", True, type=bool)
     include_ref_price = request.args.get("include-ref-price", False, type=bool)
-    
+
     if not start or not end:
         raise BadRequest("start and end must be provided.")
 
@@ -73,8 +73,10 @@ def get_quotes() -> Response:
                     cols=cols,
                     process=process,
                     include_ref_price=include_ref_price,
-                ).to_dict(orient="records")
-            )
+                )
+                .reset_index()
+                .to_dict(orient="records")
+            )  # TODO better json structure to minimize duplication
         except Exception as e:  # pylint: disable=broad-except
             return jsonify({"error": str(e)})
 
