@@ -46,17 +46,19 @@ Below, we query quotes for all pairs of the supported tokens from December 12, 2
 curl --compressed "http://97.107.138.106/quotes?&start=1702166400&end=1702252800"
 ```
 
+Please refer to `notebooks/demo_slippage_curves.ipynb` for a more detailed example.
+
 *Note that Python's `requests` will handle the `gzip` compression automatically.*
 
 ### Parameters
 
 | Parameter           | Description                                                                                          | Default Value  | Required |
 |---------------------|------------------------------------------------------------------------------------------------------|----------------|----------|
-| start               | The start timestamp to get quotes for. If not provided, all quotes until `end` are returned.        | None           | Yes      |
-| end                 | The end timestamp to get quotes for. If not provided, all quotes from `start` are returned.        | None           | Yes      |
+| start               | The start timestamp to get quotes for.        | None           | Yes      |
+| end                 | The end timestamp to get quotes for.        | None           | Yes      |
 | pair                | The pair to get quotes for. If not provided, all pairs are returned.                                | None           | No       |
-| cols                | The columns to return. If not provided, all columns are returned.                                    | None           | No       |
-| process             | Whether to process the quotes. If processed, the returned quotes will be grouped by `hour` and a `price_impact` column will be added. Refer to :func:`src.db.datahandler.DataHandler.process_quotes`. | True           | No       |
+| cols                | The columns to return. If not provided, the following are returned: [`src`, `dst`, `in_amount`, `out_amount`, `price`, `price_impact`, `timestamp`].                                    | None           | No       |
+| process             | Whether to process the quotes. If processed, the returned quotes will be grouped by `hour` and a `price_impact` column will be added. Refer to `src.db.datahandler.DataHandler.process_quotes`. | True           | No       |
 | include-ref-price   | Whether to include the inferred reference price for the price impact calc.                           | False          | No       |
 
 
@@ -69,3 +71,5 @@ There are a couple things we are still working on here:
 - Acquire and configure a domain name.
 
 - Add more tokens to our queries.
+    cols : list | None, default=None
+        The columns to return. If not provided, 

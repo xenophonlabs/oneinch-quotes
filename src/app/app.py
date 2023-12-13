@@ -30,16 +30,15 @@ def get_quotes() -> Response:
     Parameters
     ----------
     start : int
-        The start timestamp to get quotes for. If not provided,
-        all quotes until `end` are returned.
+        The start timestamp to get quotes for.
     end : int
-        The end timestamp to get quotes for. If not provided,
-        all quotes from `start` are returned.
+        The end timestamp to get quotes for.
     pair : tuple | None, default=None
         The pair to get quotes for. If not provided,
         all pairs are returned.
     cols : list | None, default=None
-        The columns to return. If not provided, all columns are returned.
+        The columns to return. If not provided, the following are returned:
+        [`src`, `dst`, `in_amount`, `out_amount`, `price`, `price_impact`, `timestamp`].
     process : bool, default=True
         Whether to process the quotes. If processed, the returned quotes
         will be grouped by `hour` and a `price_impact` column will be added.
