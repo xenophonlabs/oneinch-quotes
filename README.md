@@ -84,6 +84,4 @@ There are a couple things we are still working on here:
 
 - Acquire and configure a domain name.
 
-- Add more tokens to our queries.
-    cols : list | None, default=None
-        The columns to return. If not provided, 
+- Add more tokens to our queries. 
