@@ -25,13 +25,15 @@ def main():
     logger.info(
         f"Fetching quotes on {datetime.fromtimestamp(dt).strftime('%m/%d/%Y, %H:%M:%S')} UTC"
     )
-    quoter = OneInchQuotes(INCH_API_KEY, TOKEN_DTOs, calls=20)
-    payload = quoter.all_quotes(list(TOKEN_DTOs.keys()))
-    df = quoter.to_df(payload)
-    dh = DataHandler()
-    logger.info("Inserting...")
-    dh.insert_quotes(df)
-
+    try:
+        quoter = OneInchQuotes(INCH_API_KEY, TOKEN_DTOs, calls=20)
+        payload = quoter.all_quotes(list(TOKEN_DTOs.keys()))
+        df = quoter.to_df(payload)
+        dh = DataHandler()
+        logger.info("Inserting...")
+        dh.insert_quotes(df)
+    except Exception as e:
+        logger.error(e)
 
 if __name__ == "__main__":
     main()
