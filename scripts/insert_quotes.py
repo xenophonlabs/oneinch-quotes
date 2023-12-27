@@ -1,5 +1,5 @@
 import os
-
+import traceback
 from datetime import datetime
 from dotenv import load_dotenv
 from src.logging import get_logger
@@ -33,7 +33,8 @@ def main():
         logger.info("Inserting...")
         dh.insert_quotes(df)
     except Exception as e:
-        logger.error(e)
+        logger.error("Error %s\n%s", e, traceback.print_exc())
+
 
 if __name__ == "__main__":
     main()

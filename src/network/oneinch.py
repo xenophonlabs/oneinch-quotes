@@ -4,6 +4,7 @@ fetch quotes from the 1inch API, and the `QuoteResponse` class
 to store the response data.
 """
 import json
+import time
 from datetime import datetime
 from dataclasses import dataclass
 from itertools import permutations
@@ -147,7 +148,7 @@ class OneInchQuotes:
 
     @retry(
         stop=stop_after_attempt(MAX_RETRIES),
-        wait=wait_exponential(multiplier=1, min=1, max=5),
+        wait=wait_exponential(multiplier=1, min=1, max=20),
         retry=retry_if_exception_type(req.HTTPError),
     )
     def quote(self, in_token: str, out_token: str, in_amount: int) -> QuoteResponse:
@@ -194,6 +195,7 @@ class OneInchQuotes:
                 int(in_amount),
             )
             responses.append(res)
+            time.sleep(2)  # Avoid rate limit
         return responses
 
     def all_quotes(
@@ -206,6 +208,7 @@ class OneInchQuotes:
         for i, pair in enumerate(pairs):
             logger.info("Fetching: %s... %d/%d", pair, i + 1, n)
             responses.extend(self.quotes_for_pair(pair, calls=calls))
+            time.sleep(2)  # Avoid rate limit
         return responses
 
     def to_df(
